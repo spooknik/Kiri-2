@@ -1,0 +1,8 @@
+{
+  "id": "fixture-starlight-1",
+  "slug": "starlight-express",
+  "title": "Starlight Express",
+  "mediaType": "MANGA",
+  "cover": "cover.png",
+  "description": "A three-chapter fixture series used by the Kiri plugin tests."
+}

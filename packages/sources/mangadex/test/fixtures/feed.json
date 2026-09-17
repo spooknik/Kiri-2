@@ -1,0 +1,239 @@
+{
+  "result": "ok",
+  "response": "collection",
+  "data": [
+    {
+      "id": "edaf4c93-0bb3-409e-8fec-48cacf35a2d7",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "1",
+        "title": "Science Club Girl Who Wants to Be Invisible",
+        "translatedLanguage": "en",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2023-07-18T20:16:16+00:00",
+        "readableAt": "2023-07-18T20:16:16+00:00",
+        "createdAt": "2023-07-18T20:16:15+00:00",
+        "updatedAt": "2025-03-27T06:50:24+00:00",
+        "version": 5,
+        "pages": 4
+      },
+      "relationships": [
+        { "id": "f62c0c65-d7bb-42ee-8d44-f14d9ae974af", "type": "scanlation_group" },
+        { "id": "c77d242d-437c-4a4a-aec3-06bf86a96821", "type": "manga" },
+        { "id": "7d680798-be89-4b15-9abe-b6dda6b7c649", "type": "user" }
+      ]
+    },
+    {
+      "id": "ec974c4f-85bd-4395-bb0c-bd81c95b5695",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "1",
+        "title": "Science Club Girl Wants to Become Invisible",
+        "translatedLanguage": "en",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2023-07-12T19:11:51+00:00",
+        "readableAt": "2023-07-12T19:11:51+00:00",
+        "createdAt": "2023-07-12T19:11:50+00:00",
+        "updatedAt": "2025-03-27T06:50:20+00:00",
+        "version": 5,
+        "pages": 5
+      },
+      "relationships": [
+        { "id": "416ad4cb-d059-434c-8fd6-5919e22a383a", "type": "scanlation_group" },
+        { "id": "c77d242d-437c-4a4a-aec3-06bf86a96821", "type": "manga" },
+        { "id": "54d3325c-b51a-4875-8074-a980ccb453e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "725dd195-28fc-4ed8-95b5-882f9981c041",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "2",
+        "title": "Science Club Girl Wants to Stop Time",
+        "translatedLanguage": "en",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2023-07-12T23:45:32+00:00",
+        "readableAt": "2023-07-12T23:45:32+00:00",
+        "createdAt": "2023-07-12T23:45:31+00:00",
+        "updatedAt": "2025-03-27T06:50:21+00:00",
+        "version": 4,
+        "pages": 6
+      },
+      "relationships": [
+        { "id": "416ad4cb-d059-434c-8fd6-5919e22a383a", "type": "scanlation_group" },
+        { "id": "c77d242d-437c-4a4a-aec3-06bf86a96821", "type": "manga" },
+        { "id": "54d3325c-b51a-4875-8074-a980ccb453e8", "type": "user" }
+      ]
+    },
+    {
+      "id": "e97c84da-a751-4a27-9c4e-8b15b6ac2698",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "2",
+        "title": "Science Club Girl Who Wants to Stop Time",
+        "translatedLanguage": "en",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2023-07-19T19:17:26+00:00",
+        "readableAt": "2023-07-19T19:17:26+00:00",
+        "createdAt": "2023-07-19T19:17:25+00:00",
+        "updatedAt": "2025-03-27T06:50:25+00:00",
+        "version": 4,
+        "pages": 5
+      },
+      "relationships": [
+        { "id": "f62c0c65-d7bb-42ee-8d44-f14d9ae974af", "type": "scanlation_group" },
+        { "id": "c77d242d-437c-4a4a-aec3-06bf86a96821", "type": "manga" },
+        { "id": "7d680798-be89-4b15-9abe-b6dda6b7c649", "type": "user" }
+      ]
+    },
+    {
+      "id": "a64b9653-14f7-4ead-9f24-1544aa2d5483",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "3",
+        "title": "Science Club Girl Who Wants to See Whichever Dreams She Likes",
+        "translatedLanguage": "en",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2023-07-20T23:46:42+00:00",
+        "readableAt": "2023-07-20T23:46:42+00:00",
+        "createdAt": "2023-07-20T23:46:42+00:00",
+        "updatedAt": "2025-03-27T06:50:26+00:00",
+        "version": 4,
+        "pages": 4
+      },
+      "relationships": [
+        { "id": "f62c0c65-d7bb-42ee-8d44-f14d9ae974af", "type": "scanlation_group" },
+        { "id": "c77d242d-437c-4a4a-aec3-06bf86a96821", "type": "manga" },
+        { "id": "7d680798-be89-4b15-9abe-b6dda6b7c649", "type": "user" }
+      ]
+    },
+    {
+      "id": "6bc70fe2-cdd8-419f-8a3d-25dfc367b790",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "4",
+        "title": "The Science Club Girl Who Wants To Hypnotize",
+        "translatedLanguage": "en",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2023-08-22T23:08:47+00:00",
+        "readableAt": "2023-08-22T23:08:47+00:00",
+        "createdAt": "2023-08-22T06:42:14+00:00",
+        "updatedAt": "2025-03-27T06:50:32+00:00",
+        "version": 4,
+        "pages": 8
+      },
+      "relationships": [
+        { "id": "12e5701a-e59a-4951-91c5-dad96c6d5b65", "type": "scanlation_group" },
+        { "id": "c77d242d-437c-4a4a-aec3-06bf86a96821", "type": "manga" },
+        { "id": "115a9efd-90a3-4db5-963a-58cc9a460b5f", "type": "user" }
+      ]
+    },
+    {
+      "id": "c43fd7e9-beff-49df-891e-d6cda2b13e64",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "4",
+        "title": "Science Club Girl Who Wants to Hypnotize",
+        "translatedLanguage": "en",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2023-08-26T14:32:09+00:00",
+        "readableAt": "2023-08-26T14:32:09+00:00",
+        "createdAt": "2023-08-26T14:32:09+00:00",
+        "updatedAt": "2025-03-27T06:50:32+00:00",
+        "version": 5,
+        "pages": 7
+      },
+      "relationships": [
+        { "id": "f62c0c65-d7bb-42ee-8d44-f14d9ae974af", "type": "scanlation_group" },
+        { "id": "c77d242d-437c-4a4a-aec3-06bf86a96821", "type": "manga" },
+        { "id": "7d680798-be89-4b15-9abe-b6dda6b7c649", "type": "user" }
+      ]
+    },
+    {
+      "id": "a2d9226f-dabc-4396-b1d6-96710b696370",
+      "type": "chapter",
+      "attributes": {
+        "volume": "1",
+        "chapter": "5",
+        "title": "Science Club Girl Who Wants to See Through Things",
+        "translatedLanguage": "en",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2024-04-03T19:03:31+00:00",
+        "readableAt": "2024-04-03T19:03:31+00:00",
+        "createdAt": "2024-04-03T19:03:31+00:00",
+        "updatedAt": "2025-03-27T06:50:34+00:00",
+        "version": 6,
+        "pages": 5
+      },
+      "relationships": [
+        { "id": "f62c0c65-d7bb-42ee-8d44-f14d9ae974af", "type": "scanlation_group" },
+        { "id": "c77d242d-437c-4a4a-aec3-06bf86a96821", "type": "manga" },
+        { "id": "7d680798-be89-4b15-9abe-b6dda6b7c649", "type": "user" }
+      ]
+    },
+    {
+      "id": "79a6a4de-7afd-4f48-bdee-bc2ed1ece598",
+      "type": "chapter",
+      "attributes": {
+        "volume": null,
+        "chapter": "6",
+        "title": "Science Club Girl Who Wants to Show Illusions",
+        "translatedLanguage": "en",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2025-05-25T16:06:14+00:00",
+        "readableAt": "2025-05-25T16:06:14+00:00",
+        "createdAt": "2025-05-25T16:06:13+00:00",
+        "updatedAt": "2025-05-25T16:07:01+00:00",
+        "version": 3,
+        "pages": 6
+      },
+      "relationships": [
+        { "id": "f62c0c65-d7bb-42ee-8d44-f14d9ae974af", "type": "scanlation_group" },
+        { "id": "c77d242d-437c-4a4a-aec3-06bf86a96821", "type": "manga" },
+        { "id": "7d680798-be89-4b15-9abe-b6dda6b7c649", "type": "user" }
+      ]
+    },
+    {
+      "id": "a5d16e95-ffa4-4582-824a-60d4b7c64999",
+      "type": "chapter",
+      "attributes": {
+        "volume": null,
+        "chapter": "7",
+        "title": "Science Club Girl and Latte Art",
+        "translatedLanguage": "en",
+        "externalUrl": null,
+        "isUnavailable": false,
+        "publishAt": "2026-06-26T00:09:12+00:00",
+        "readableAt": "2026-06-26T00:09:12+00:00",
+        "createdAt": "2026-06-26T00:09:11+00:00",
+        "updatedAt": "2026-06-26T00:09:20+00:00",
+        "version": 3,
+        "pages": 1
+      },
+      "relationships": [
+        { "id": "f62c0c65-d7bb-42ee-8d44-f14d9ae974af", "type": "scanlation_group" },
+        { "id": "c77d242d-437c-4a4a-aec3-06bf86a96821", "type": "manga" },
+        { "id": "81605374-c4be-4833-9d41-d9396629925e", "type": "user" }
+      ]
+    }
+  ],
+  "limit": 500,
+  "offset": 0,
+  "total": 10
+}

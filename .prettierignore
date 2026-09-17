@@ -1,0 +1,12 @@
+node_modules
+.next
+dist
+coverage
+playwright-report
+test-results
+apps/web/src/generated
+apps/web/public/sw.js
+apps/web/prisma/migrations
+package-lock.json
+.pgdata
+data

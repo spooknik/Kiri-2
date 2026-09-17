@@ -1,0 +1,14 @@
+{
+  "id": "template",
+  "name": "Template Source",
+  "version": "0.1.0",
+  "sdk": "^2.0.0-alpha.0",
+  "entry": "./src/index.mjs",
+  "hosts": ["localhost", "127.0.0.1"],
+  "capabilities": ["network"],
+  "mediaTypes": ["MANGA"],
+  "adult": false,
+  "homepage": "https://github.com/spooknik/Kiri2",
+  "license": "MIT",
+  "minKiriVersion": "2.0.0"
+}

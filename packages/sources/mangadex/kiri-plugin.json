@@ -1,0 +1,30 @@
+{
+  "id": "mangadex",
+  "name": "MangaDex",
+  "version": "0.1.0",
+  "sdk": "^2.0.0-alpha.0",
+  "entry": "./src/index.mjs",
+  "hosts": ["mangadex.org", "www.mangadex.org"],
+  "capabilities": ["network"],
+  "mediaTypes": ["MANGA", "MANHWA", "MANHUA"],
+  "adult": false,
+  "homepage": "https://mangadex.org",
+  "license": "AGPL-3.0-only",
+  "minKiriVersion": "2.0.0",
+  "settings": [
+    {
+      "key": "language",
+      "type": "string",
+      "default": "en",
+      "label": "Translated language",
+      "description": "Translated language code(s), comma separated"
+    },
+    {
+      "key": "dataSaver",
+      "type": "boolean",
+      "default": false,
+      "label": "Data saver",
+      "description": "Download the compressed MangaDex@Home data-saver images instead of the originals"
+    }
+  ]
+}

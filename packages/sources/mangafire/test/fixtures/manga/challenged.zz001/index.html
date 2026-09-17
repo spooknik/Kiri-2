@@ -1,0 +1,23 @@
+<!doctype html>
+<!--
+  A synthesised Cloudflare "managed challenge" interstitial served with a
+  plain 200 status — MangaFire has been observed doing this, which is exactly
+  why this plugin checks response bodies itself instead of relying solely on
+  the SDK's 403/503 detection (see `assertNotChallenge` in src/index.mjs).
+-->
+<html>
+  <head>
+    <title>Just a moment...</title>
+  </head>
+  <body class="no-js">
+    <div class="main-wrapper" id="cf-wrapper">
+      <div id="challenge-running"></div>
+      <script>
+        (function () {
+          var _cf_chl_opt = { cType: "managed" };
+        })();
+      </script>
+      <p>Performing security verification, please wait a moment...</p>
+    </div>
+  </body>
+</html>

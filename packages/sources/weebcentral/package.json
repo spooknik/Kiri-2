@@ -1,0 +1,23 @@
+{
+  "name": "@kiri/source-weebcentral",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Kiri content-source plugin for weebcentral (converted from the Kiri 1.x ripper)",
+  "license": "AGPL-3.0-only",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run --passWithNoTests",
+    "hello": "node src/index.mjs hello"
+  },
+  "dependencies": {
+    "@kiri/source-sdk": "*"
+  },
+  "files": [
+    "kiri-plugin.json",
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  }
+}

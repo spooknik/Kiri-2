@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="theme.css" />
+    <style>
+      body {
+        width: 320px;
+        padding: 0.9rem;
+      }
+      .brand {
+        margin-bottom: 0.7rem;
+      }
+      #status {
+        margin-bottom: 0.6rem;
+      }
+      .current-tab {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        padding: 0.6rem 0.7rem;
+        border: 1px solid var(--card-border);
+        border-radius: 10px;
+        margin-bottom: 0.8rem;
+      }
+      .current-tab .label {
+        font-size: 0.78rem;
+        color: var(--muted-strong);
+        word-break: break-all;
+      }
+      button.small {
+        padding: 0.4rem 0.7rem;
+        font-size: 0.76rem;
+        flex-shrink: 0;
+      }
+      .hosts-title {
+        font-weight: 600;
+        font-size: 0.82rem;
+        margin: 0 0 0.4rem;
+      }
+      .hosts-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        max-height: 220px;
+        overflow-y: auto;
+      }
+      .host-row {
+        border: 1px solid var(--card-border);
+        border-radius: 10px;
+        padding: 0.5rem 0.6rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+      }
+      .host-top {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+      }
+      .host-label {
+        font-size: 0.82rem;
+        font-weight: 600;
+        word-break: break-all;
+      }
+      .host-meta {
+        font-size: 0.72rem;
+        color: var(--muted);
+      }
+      .dot {
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--success);
+        flex-shrink: 0;
+      }
+      .dot.off {
+        background: var(--muted);
+      }
+      .empty {
+        font-size: 0.8rem;
+        color: var(--muted);
+      }
+      .options-link {
+        display: inline-block;
+        margin-top: 0.8rem;
+        font-size: 0.78rem;
+        color: var(--primary);
+        cursor: pointer;
+        text-decoration: none;
+      }
+      .options-link:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 7v14" />
+          <path
+            d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+          />
+        </svg>
+      </span>
+      <div>
+        <div class="brand-title">Kiri</div>
+        <div class="brand-sub">Cookie Bridge</div>
+      </div>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <div class="current-tab">
+      <span class="label">This tab: <span id="currentHost"></span></span>
+      <button id="captureCurrent" class="small" disabled>Capture now</button>
+    </div>
+
+    <p class="hosts-title">Sites your plugins need</p>
+    <div id="hostsList" class="hosts-list"></div>
+
+    <a id="openOptions" class="options-link">Options</a>
+
+    <script type="module" src="popup.js"></script>
+  </body>
+</html>

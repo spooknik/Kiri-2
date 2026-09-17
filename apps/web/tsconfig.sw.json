@@ -1,0 +1,12 @@
+{
+  "//": "Type-checks src/app/sw.ts on its own terms. The service worker needs the WebWorker lib, which cannot coexist with the DOM lib the app is compiled against - hence the exclude in tsconfig.json. Run with `npm run typecheck:sw`.",
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["esnext", "webworker"],
+    "types": [],
+    "incremental": false,
+    "plugins": []
+  },
+  "include": ["src/app/sw.ts", "src/lib/offline/cache-names.ts"],
+  "exclude": []
+}

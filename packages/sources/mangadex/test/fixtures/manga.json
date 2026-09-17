@@ -1,0 +1,186 @@
+{
+  "result": "ok",
+  "response": "entity",
+  "data": {
+    "id": "c77d242d-437c-4a4a-aec3-06bf86a96821",
+    "type": "manga",
+    "attributes": {
+      "title": { "ja-ro": "Kagakubu Girl" },
+      "altTitles": [
+        { "ja": "\u79d1\u5b66\u90e8\u30ac\u30fc\u30eb" },
+        { "ja-ro": "Kagakubu Girl" },
+        { "en": "Science Department Girl" },
+        { "en": "Science Club Girl" },
+        { "pt-br": "Garota do clube de ci\u00eancias" },
+        { "ru": "La fille du club de science" }
+      ],
+      "description": {
+        "en": "*A drug that makes you invisible\u2026 A clock that stops time\u2026*\n\nA slapstick, cackling, and\u2026 slightly thrilling?... story of the daily life of \u201cDoctor\u201d, a girl who belongs to the Science Department and works day and night on such mysterious, dreamlike inventions, and \u201cAssistant Hara-kun\u201d, who is constantly at her mercy!",
+        "ja": "\u300e \u900f\u660e\u4eba\u9593\u306b\u306a\u308b\u85ac\u2026 \u6642\u3092\u6b62\u3081\u308b\u6642\u8a08\u2026\uff01\u300f\n\n\u305d\u3093\u306a\u5922\u306e\u3088\u3046\u306a\u602a\u3057\u301c\u3044\u767a\u660e\u306b\u65e5\u591c \u52e4\u3057\u3080\u300c\u79d1\u5b66\u90e8\u300d\u306b\u6240\u5c5e\u3059\u308b\u5973\u306e\u5b50\u300e\u535a\u58eb\u300f\u3068\n\u305d\u308c\u306b\u632f\u308a\u56de\u3055\u308c\u308b\u304a\u624b\u4f1d\u3044\u306e\u300e\u52a9\u624b\u539f\u304f\u3093\u300f\u306e\u30c9\u30bf\u30d0\u30bf \u30e0\u30d5\u30d5\u3067\u2026\u3061\u3087\u3063\u3074\u308a\u30c9\u30ad\u30c9\u30ad\uff1f\u2026\u306a\u65e5\u5e38\u5287\uff01\n\n(x)Twitter \u3084 pixiv \u306b\u3066\u63b2\u8f09\u3057\u3066\u3044\u305f\u6f2b\u753b\u306e\u307e\u3068\u3081\u306b\u306a\u308a\u307e\u3059\u3002\n\u672c\u7de8\u300e\u7f8e\u8853\u90e8\u30ac\u30fc\u30eb\u300f\u306e\u30b9\u30d4\u30f3\u30aa\u30d5\u6d3e\u751f\u4f5c\u54c1\u3067\u3059\u3002"
+      },
+      "isLocked": false,
+      "links": {
+        "kt": "kagakubu-girl",
+        "mu": "kur24kd",
+        "amz": "https:\/\/www.amazon.co.jp\/dp\/B0D4KDNND1",
+        "raw": "https:\/\/www.pixiv.net\/user\/4128746\/series\/208782"
+      },
+      "officialLinks": null,
+      "originalLanguage": "ja",
+      "lastVolume": "",
+      "lastChapter": "",
+      "publicationDemographic": null,
+      "status": "ongoing",
+      "year": 2023,
+      "contentRating": "safe",
+      "tags": [
+        {
+          "id": "423e2eae-a7a2-4a8b-ac03-a8351462d71d",
+          "type": "tag",
+          "attributes": {
+            "name": { "en": "Romance" },
+            "description": {},
+            "group": "genre",
+            "version": 1
+          },
+          "relationships": []
+        },
+        {
+          "id": "4d32cc48-9f00-4cca-9b5a-a839f0764984",
+          "type": "tag",
+          "attributes": {
+            "name": { "en": "Comedy" },
+            "description": {},
+            "group": "genre",
+            "version": 1
+          },
+          "relationships": []
+        },
+        {
+          "id": "b13b2a48-c720-44a9-9c77-39c9979373fb",
+          "type": "tag",
+          "attributes": {
+            "name": { "en": "Doujinshi" },
+            "description": {},
+            "group": "format",
+            "version": 1
+          },
+          "relationships": []
+        },
+        {
+          "id": "caaa44eb-cd40-4177-b930-79d3ef2afe87",
+          "type": "tag",
+          "attributes": {
+            "name": { "en": "School Life" },
+            "description": {},
+            "group": "theme",
+            "version": 1
+          },
+          "relationships": []
+        },
+        {
+          "id": "e197df38-d0e7-43b5-9b09-2842d0c326dd",
+          "type": "tag",
+          "attributes": {
+            "name": { "en": "Web Comic" },
+            "description": {},
+            "group": "format",
+            "version": 1
+          },
+          "relationships": []
+        },
+        {
+          "id": "e5301a23-ebd9-49dd-a0cb-2add944c7fe9",
+          "type": "tag",
+          "attributes": {
+            "name": { "en": "Slice of Life" },
+            "description": {},
+            "group": "genre",
+            "version": 1
+          },
+          "relationships": []
+        }
+      ],
+      "state": "published",
+      "chapterNumbersResetOnNewVolume": false,
+      "createdAt": "2023-07-12T19:07:42+00:00",
+      "updatedAt": "2026-06-26T17:57:41+00:00",
+      "version": 22,
+      "availableTranslatedLanguages": ["es-la", "id", "ru", "en", "fr", "pt-br"],
+      "latestUploadedChapter": "a5d16e95-ffa4-4582-824a-60d4b7c64999"
+    },
+    "relationships": [
+      {
+        "id": "15afd66c-a820-4fb1-85c7-21030c63ae94",
+        "type": "author",
+        "attributes": {
+          "name": "Koikawa Hayato",
+          "imageUrl": null,
+          "biography": {
+            "en": "**Name In Native Language:** \u604b\u5ddd\u306f\u3084\u3068\n\n**Additional Sites:**\n- [2nd X](https:\/\/x.com\/koikawa_japan)"
+          },
+          "twitter": "https:\/\/twitter.com\/koikawa01",
+          "pixiv": "https:\/\/www.pixiv.net\/users\/4128746",
+          "melonBook": null,
+          "fanBox": "https:\/\/koikawa01.fanbox.cc\/",
+          "booth": "https:\/\/hayatokoikawa.booth.pm\/",
+          "namicomi": null,
+          "nicoVideo": null,
+          "skeb": "https:\/\/skeb.jp\/@koikawa01",
+          "fantia": null,
+          "tumblr": null,
+          "youtube": null,
+          "weibo": null,
+          "naver": null,
+          "website": null,
+          "createdAt": "2021-04-19T21:59:45+00:00",
+          "updatedAt": "2025-02-26T18:55:13+00:00",
+          "version": 3
+        }
+      },
+      {
+        "id": "15afd66c-a820-4fb1-85c7-21030c63ae94",
+        "type": "artist",
+        "attributes": {
+          "name": "Koikawa Hayato",
+          "imageUrl": null,
+          "biography": {
+            "en": "**Name In Native Language:** \u604b\u5ddd\u306f\u3084\u3068\n\n**Additional Sites:**\n- [2nd X](https:\/\/x.com\/koikawa_japan)"
+          },
+          "twitter": "https:\/\/twitter.com\/koikawa01",
+          "pixiv": "https:\/\/www.pixiv.net\/users\/4128746",
+          "melonBook": null,
+          "fanBox": "https:\/\/koikawa01.fanbox.cc\/",
+          "booth": "https:\/\/hayatokoikawa.booth.pm\/",
+          "namicomi": null,
+          "nicoVideo": null,
+          "skeb": "https:\/\/skeb.jp\/@koikawa01",
+          "fantia": null,
+          "tumblr": null,
+          "youtube": null,
+          "weibo": null,
+          "naver": null,
+          "website": null,
+          "createdAt": "2021-04-19T21:59:45+00:00",
+          "updatedAt": "2025-02-26T18:55:13+00:00",
+          "version": 3
+        }
+      },
+      {
+        "id": "d83e37c5-9347-4f14-aa4f-3194b0078953",
+        "type": "cover_art",
+        "attributes": {
+          "description": "",
+          "volume": "1",
+          "fileName": "a675a647-2b02-4189-8968-d759323e9421.png",
+          "locale": "ja",
+          "createdAt": "2024-05-24T13:52:28+00:00",
+          "updatedAt": "2024-05-24T13:52:28+00:00",
+          "version": 1
+        }
+      },
+      { "id": "d2b02bb0-a8ec-405f-9c2d-d63df7cff785", "type": "manga", "related": "adapted_from" },
+      { "id": "54d3325c-b51a-4875-8074-a980ccb453e8", "type": "creator" }
+    ]
+  }
+}

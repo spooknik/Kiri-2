@@ -1,0 +1,645 @@
+// Kiri 2.0 data model. Conventions: camelCase in TypeScript, snake_case in
+// PostgreSQL via @map/@@map, UUID primary keys, every foreign key indexed,
+// explicit index names. Import the generated client from
+// "@/generated/prisma/client", never from "@prisma/client".
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+enum Visibility {
+  SHARED
+  PRIVATE
+}
+
+enum MediaType {
+  MANGA
+  MANHWA
+  MANHUA
+  COMIC
+  LIGHT_NOVEL
+  NOVEL
+  BOOK
+  OTHER
+}
+
+enum ReadingStatus {
+  READING
+  COMPLETED
+  ON_HOLD
+  DROPPED
+  PLAN_TO_READ
+}
+
+enum SourceStatus {
+  UNCONFIGURED
+  NEEDS_PLUGIN
+  PENDING
+  RUNNING
+  READY
+  FAILED
+}
+
+enum AutoSyncMode {
+  INHERIT
+  DISABLED
+  CUSTOM
+}
+
+enum JobKind {
+  SOURCE_SYNC
+  SOURCE_VERIFY
+  OPTIMIZE
+  PDF_IMPORT
+  MANUAL_UPLOAD
+  PLUGIN_INSTALL
+  V1_IMPORT
+  INGEST_MANIFEST
+}
+
+enum JobStatus {
+  QUEUED
+  RUNNING
+  SUCCEEDED
+  FAILED
+  CANCELLED
+}
+
+enum ChapterStatus {
+  PENDING
+  DOWNLOADING
+  COMPLETED
+  FAILED
+  MISSING_FROM_SOURCE
+}
+
+enum ChapterOrigin {
+  PLUGIN
+  PDF
+  MANUAL
+}
+
+enum PluginStatus {
+  ENABLED
+  DISABLED
+  BROKEN
+}
+
+enum NotificationType {
+  BOOK_CLUB_ADDED
+  SYNC_COMPLETED
+  SYNC_FAILED
+  NEW_CHAPTER
+  NOTE_REPLY
+  NOTE_MENTION
+  NEEDS_CREDENTIAL
+  PLUGIN_INSTALLED
+  PLUGIN_FAILED
+  IMPORT_COMPLETED
+}
+
+enum InviteStatus {
+  PENDING
+  ACCEPTED
+  REVOKED
+  EXPIRED
+}
+
+enum RegistrationMode {
+  INVITE
+  OPEN
+  CLOSED
+}
+
+// ---------------------------------------------------------------------------
+// Auth (better-auth core + admin plugin, plus Kiri profile fields)
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String    @id @default(uuid())
+  // better-auth core
+  name          String
+  email         String    @unique
+  emailVerified Boolean   @default(false) @map("email_verified")
+  image         String?
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  // better-auth admin plugin ("admin" | "member")
+  role          String    @default("member")
+  banned        Boolean   @default(false)
+  banReason     String?   @map("ban_reason")
+  banExpires    DateTime? @map("ban_expires")
+  // Kiri profile
+  displayName      String  @map("display_name")
+  showAdult        Boolean @default(false) @map("show_adult")
+  showSpoilers     Boolean @default(false) @map("show_spoilers")
+  optimizerFormat  String  @default("WEBP") @map("optimizer_format")
+  optimizerQuality Int     @default(80) @map("optimizer_quality")
+  // Imported V1 users have no password until they redeem an invite.
+  mustSetPassword  Boolean @default(false) @map("must_set_password")
+  readerPrefs      Json?   @map("reader_prefs")
+
+  sessions       Session[]
+  accounts       Account[]
+  createdSeries  Series[]          @relation("SeriesCreator")
+  library        LibraryEntry[]
+  positions      ReadingPosition[]
+  chapterReads   ChapterRead[]
+  notes          Note[]
+  notifications  Notification[]
+  invitesCreated Invite[]          @relation("InviteCreator")
+  invitesUsed    Invite[]          @relation("InviteRedeemer")
+  jobs           Job[]             @relation("JobRequester")
+  auditEntries   AuditLog[]
+
+  @@index([role], map: "user_role_idx")
+  @@map("user")
+}
+
+model Session {
+  id             String   @id @default(uuid())
+  token          String   @unique
+  expiresAt      DateTime @map("expires_at")
+  ipAddress      String?  @map("ip_address")
+  userAgent      String?  @map("user_agent")
+  userId         String   @map("user_id")
+  impersonatedBy String?  @map("impersonated_by")
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "session_user_id_idx")
+  @@index([expiresAt], map: "session_expires_at_idx")
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(uuid())
+  accountId             String    @map("account_id")
+  providerId            String    @map("provider_id")
+  userId                String    @map("user_id")
+  accessToken           String?   @map("access_token")
+  refreshToken          String?   @map("refresh_token")
+  idToken               String?   @map("id_token")
+  accessTokenExpiresAt  DateTime? @map("access_token_expires_at")
+  refreshTokenExpiresAt DateTime? @map("refresh_token_expires_at")
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([providerId, accountId], map: "account_provider_account_key")
+  @@index([userId], map: "account_user_id_idx")
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(uuid())
+  identifier String
+  value      String
+  expiresAt  DateTime @map("expires_at")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+
+  @@index([identifier], map: "verification_identifier_idx")
+  @@index([expiresAt], map: "verification_expires_at_idx")
+  @@map("verification")
+}
+
+model Invite {
+  id           String       @id @default(uuid())
+  // sha256 of the raw token; the raw token is only ever shown once.
+  tokenHash    String       @unique @map("token_hash")
+  email        String?
+  role         String       @default("member")
+  status       InviteStatus @default(PENDING)
+  expiresAt    DateTime     @map("expires_at")
+  createdById  String       @map("created_by_id")
+  redeemedById String?      @map("redeemed_by_id")
+  redeemedAt   DateTime?    @map("redeemed_at")
+  createdAt    DateTime     @default(now()) @map("created_at")
+
+  createdBy  User  @relation("InviteCreator", fields: [createdById], references: [id], onDelete: Cascade)
+  redeemedBy User? @relation("InviteRedeemer", fields: [redeemedById], references: [id], onDelete: SetNull)
+
+  @@index([status, expiresAt], map: "invite_status_expires_idx")
+  @@index([createdById], map: "invite_created_by_idx")
+  @@map("invite")
+}
+
+// ---------------------------------------------------------------------------
+// Library
+// ---------------------------------------------------------------------------
+
+model Series {
+  id              String     @id @default(uuid())
+  title           String
+  originalTitle   String?    @map("original_title")
+  // Lowercased, de-accented title computed by the app for server-side sorting.
+  sortTitle       String     @map("sort_title")
+  synopsis        String?
+  mediaType       MediaType  @default(MANGA) @map("media_type")
+  visibility      Visibility @default(SHARED)
+  isAdult         Boolean    @default(false) @map("is_adult")
+  isBookClub      Boolean    @default(false) @map("is_book_club")
+  publicationYear Int?       @map("publication_year")
+  totalChapters   Int?       @map("total_chapters")
+  totalVolumes    Int?       @map("total_volumes")
+  tags            String[]   @default([])
+  // Where the series is read online (V1 `link`).
+  sourceUrl       String?    @map("source_url")
+  // Cover file name inside the content store, never a URL.
+  coverFile       String?    @map("cover_file")
+  // { malId, anilistId, remoteCover, ... }
+  externalIds     Json       @default("{}") @map("external_ids")
+  malId           Int?       @map("mal_id")
+  // Denormalised by manifest ingest.
+  chapterCount    Int        @default(0) @map("chapter_count")
+  lastChapterAt   DateTime?  @map("last_chapter_at")
+  createdById     String     @map("created_by_id")
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+  // GENERATED ALWAYS column (title A, original title B, synopsis C); see 0001_init.
+  searchVector    Unsupported("tsvector")? @map("search_vector")
+
+  createdBy     User              @relation("SeriesCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  source        Source?
+  chapters      Chapter[]
+  library       LibraryEntry[]
+  positions     ReadingPosition[]
+  chapterReads  ChapterRead[]
+  notes         Note[]
+  notifications Notification[]
+  jobs          Job[]
+
+  @@index([createdById], map: "series_created_by_idx")
+  @@index([visibility, isAdult, sortTitle], map: "series_browse_idx")
+  @@index([mediaType], map: "series_media_type_idx")
+  @@index([isBookClub], map: "series_book_club_idx")
+  @@index([malId], map: "series_mal_id_idx")
+  @@index([updatedAt], map: "series_updated_at_idx")
+  @@index([searchVector], map: "series_search_gin_idx", type: Gin)
+  @@index([tags], map: "series_tags_gin_idx", type: Gin)
+  @@map("series")
+}
+
+model LibraryEntry {
+  id             String        @id @default(uuid())
+  userId         String        @map("user_id")
+  seriesId       String        @map("series_id")
+  status         ReadingStatus @default(PLAN_TO_READ)
+  // Manual counter; chapter numbers can be fractional (12.5).
+  currentChapter Float         @default(0) @map("current_chapter")
+  rating         Int?
+  notes          String?
+  favorite       Boolean       @default(false)
+  joinedAt       DateTime      @default(now()) @map("joined_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  series Series @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, seriesId], map: "library_user_series_key")
+  @@index([seriesId], map: "library_series_idx")
+  @@index([userId, status, updatedAt], map: "library_user_status_idx")
+  @@map("library_entry")
+}
+
+// ---------------------------------------------------------------------------
+// Content sources, chapters, pages
+// ---------------------------------------------------------------------------
+
+model Source {
+  id                      String       @id @default(uuid())
+  seriesId                String       @unique @map("series_id")
+  pluginId                String?      @map("plugin_id")
+  normalizedUrl           String?      @map("normalized_url")
+  slug                    String?
+  status                  SourceStatus @default(UNCONFIGURED)
+  // Per-series plugin options and importer breadcrumbs (e.g. v1Site).
+  configJson              Json         @default("{}") @map("config_json")
+  // AES-256-GCM envelope: keyId | salt | iv | ciphertext | tag.
+  cookieEnc               Bytes?       @map("cookie_enc")
+  userAgent               String?      @map("user_agent")
+  cookieUpdatedAt         DateTime?    @map("cookie_updated_at")
+  lastError               String?      @map("last_error")
+  lastErrorCode           String?      @map("last_error_code")
+  lastSyncedAt            DateTime?    @map("last_synced_at")
+  autoSyncMode            AutoSyncMode @default(INHERIT) @map("auto_sync_mode")
+  autoSyncIntervalMinutes Int?         @map("auto_sync_interval_minutes")
+  autoSyncRequestedAt     DateTime?    @map("auto_sync_requested_at")
+  createdAt               DateTime     @default(now()) @map("created_at")
+  updatedAt               DateTime     @updatedAt @map("updated_at")
+
+  series Series  @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  plugin Plugin? @relation(fields: [pluginId], references: [id], onDelete: SetNull)
+  jobs   Job[]
+
+  @@index([pluginId], map: "source_plugin_idx")
+  @@index([status, autoSyncMode, lastSyncedAt], map: "source_autosync_idx")
+  @@map("source")
+}
+
+model Chapter {
+  id              String        @id @default(uuid())
+  seriesId        String        @map("series_id")
+  slug            String
+  externalId      String?       @map("external_id")
+  title           String
+  number          Float?
+  volume          String?
+  status          ChapterStatus @default(PENDING)
+  origin          ChapterOrigin @default(PLUGIN)
+  pageCount       Int           @default(0) @map("page_count")
+  bytes           BigInt        @default(0)
+  sourceUrl       String?       @map("source_url")
+  releaseDate     DateTime?     @map("release_date")
+  releaseDateText String?       @map("release_date_text")
+  downloadedAt    DateTime?     @map("downloaded_at")
+  lastError       String?       @map("last_error")
+  // Materialised reading order within the series.
+  sortIndex       Int           @map("sort_index")
+  createdAt       DateTime      @default(now()) @map("created_at")
+  updatedAt       DateTime      @updatedAt @map("updated_at")
+
+  series    Series            @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  pages     Page[]
+  reads     ChapterRead[]
+  notes     Note[]
+  positions ReadingPosition[]
+
+  @@unique([seriesId, slug], map: "chapter_series_slug_key")
+  @@index([seriesId, sortIndex], map: "chapter_series_order_idx")
+  @@index([seriesId, status], map: "chapter_series_status_idx")
+  @@index([seriesId, externalId], map: "chapter_series_external_idx")
+  @@map("chapter")
+}
+
+model Page {
+  id        String  @id @default(uuid())
+  chapterId String  @map("chapter_id")
+  // 1-based, matches manifest image.index.
+  index     Int
+  file      String
+  bytes     Int     @default(0)
+  sha256    String?
+  width     Int?
+  height    Int?
+  mime      String?
+  sourceUrl String? @map("source_url")
+
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@unique([chapterId, index], map: "page_chapter_index_key")
+  @@map("page")
+}
+
+// ---------------------------------------------------------------------------
+// Per-user reading state
+// ---------------------------------------------------------------------------
+
+model ChapterRead {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  seriesId  String   @map("series_id")
+  chapterId String   @map("chapter_id")
+  readAt    DateTime @default(now()) @map("read_at")
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  series  Series  @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, chapterId], map: "chapter_read_user_chapter_key")
+  @@index([userId, seriesId], map: "chapter_read_user_series_idx")
+  @@index([seriesId, chapterId], map: "chapter_read_series_chapter_idx")
+  @@map("chapter_read")
+}
+
+model ReadingPosition {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  seriesId  String   @map("series_id")
+  chapterId String?  @map("chapter_id")
+  pageIndex Int      @default(0) @map("page_index")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  series  Series   @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  chapter Chapter? @relation(fields: [chapterId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, seriesId], map: "reading_position_user_series_key")
+  @@index([seriesId], map: "reading_position_series_idx")
+  @@index([userId, updatedAt], map: "reading_position_recent_idx")
+  @@index([chapterId], map: "reading_position_chapter_idx")
+  @@map("reading_position")
+}
+
+// ---------------------------------------------------------------------------
+// Notes (page/frame annotations)
+// ---------------------------------------------------------------------------
+
+model Note {
+  // Client-generated UUID allowed so offline writes upsert idempotently.
+  id        String    @id @default(uuid())
+  userId    String    @map("user_id")
+  seriesId  String    @map("series_id")
+  chapterId String?   @map("chapter_id")
+  // null = chapter-level note (or series-level when chapterId is also null).
+  pageIndex Int?      @map("page_index")
+  // Normalised 0..1 pin position on the page image.
+  pinX      Float?    @map("pin_x")
+  pinY      Float?    @map("pin_y")
+  body      String
+  parentId  String?   @map("parent_id")
+  isSpoiler Boolean   @default(false) @map("is_spoiler")
+  editedAt  DateTime? @map("edited_at")
+  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+
+  user    User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  series  Series   @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  chapter Chapter? @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  parent  Note?    @relation("NoteThread", fields: [parentId], references: [id], onDelete: Cascade)
+  replies Note[]   @relation("NoteThread")
+
+  @@index([chapterId, pageIndex, createdAt], map: "note_anchor_idx")
+  @@index([seriesId, createdAt], map: "note_series_recent_idx")
+  @@index([parentId], map: "note_thread_idx")
+  @@index([userId, createdAt], map: "note_author_idx")
+  @@map("note")
+}
+
+// ---------------------------------------------------------------------------
+// Background jobs and plugins
+// ---------------------------------------------------------------------------
+
+model Job {
+  id            String    @id @default(uuid())
+  kind          JobKind
+  status        JobStatus @default(QUEUED)
+  sourceId      String?   @map("source_id")
+  seriesId      String?   @map("series_id")
+  pluginId      String?   @map("plugin_id")
+  requestedById String?   @map("requested_by_id")
+  configJson    Json      @default("{}") @map("config_json")
+  // { phase, current, total, chapterSlug, message }
+  progressJson  Json      @default("{}") @map("progress_json")
+  resultJson    Json?     @map("result_json")
+  attempt       Int       @default(0)
+  pid           Int?
+  startedAt     DateTime? @map("started_at")
+  finishedAt    DateTime? @map("finished_at")
+  heartbeatAt   DateTime? @map("heartbeat_at")
+  outputLog     String?   @map("output_log")
+  error         String?
+  errorCode     String?   @map("error_code")
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  source      Source? @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  series      Series? @relation(fields: [seriesId], references: [id], onDelete: Cascade)
+  requestedBy User?   @relation("JobRequester", fields: [requestedById], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt], map: "job_queue_idx")
+  @@index([sourceId, status], map: "job_source_status_idx")
+  @@index([status, heartbeatAt], map: "job_stale_idx")
+  @@index([seriesId, createdAt], map: "job_series_history_idx")
+  @@map("job")
+}
+
+model Plugin {
+  // Descriptor id, equal to the directory name under DATA_ROOT/plugins.
+  id             String       @id
+  name           String
+  version        String
+  sdkRange       String       @map("sdk_range")
+  entry          String
+  dir            String
+  hosts          String[]     @default([])
+  capabilities   String[]     @default([])
+  mediaTypes     MediaType[]  @default([]) @map("media_types")
+  adult          Boolean      @default(false)
+  homepage       String?
+  license        String?
+  minKiriVersion String?      @map("min_kiri_version")
+  // git URL + commit sha | zip file name | "dropin"
+  installSource  String?      @map("install_source")
+  descriptorHash String       @map("descriptor_hash")
+  status         PluginStatus @default(ENABLED)
+  lastError      String?      @map("last_error")
+  installedAt    DateTime     @default(now()) @map("installed_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+
+  sources     Source[]
+  credentials PluginCredential[]
+
+  @@index([status], map: "plugin_status_idx")
+  @@index([hosts], map: "plugin_hosts_gin_idx", type: Gin)
+  @@map("plugin")
+}
+
+model PluginCredential {
+  id        String   @id @default(uuid())
+  pluginId  String   @map("plugin_id")
+  host      String
+  cookieEnc Bytes?   @map("cookie_enc")
+  userAgent String?  @map("user_agent")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  plugin Plugin @relation(fields: [pluginId], references: [id], onDelete: Cascade)
+
+  @@unique([pluginId, host], map: "plugin_credential_plugin_host_key")
+  @@index([host], map: "plugin_credential_host_idx")
+  @@map("plugin_credential")
+}
+
+// ---------------------------------------------------------------------------
+// Notifications, settings, audit, import bookkeeping
+// ---------------------------------------------------------------------------
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String           @map("user_id")
+  type      NotificationType
+  title     String
+  message   String
+  link      String?
+  seriesId  String?          @map("series_id")
+  noteId    String?          @map("note_id")
+  jobId     String?          @map("job_id")
+  // Collapses repeated notifications (e.g. SYNC_FAILED for the same source).
+  dedupeKey String?          @map("dedupe_key")
+  readAt    DateTime?        @map("read_at")
+  createdAt DateTime         @default(now()) @map("created_at")
+
+  user   User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  series Series? @relation(fields: [seriesId], references: [id], onDelete: SetNull)
+
+  @@unique([userId, dedupeKey], map: "notification_dedupe_key")
+  @@index([userId, createdAt], map: "notification_user_recent_idx")
+  @@index([userId, readAt, createdAt], map: "notification_user_unread_idx")
+  @@index([seriesId], map: "notification_series_idx")
+  @@index([createdAt], map: "notification_retention_idx")
+  @@map("notification")
+}
+
+model AppSetting {
+  id                        String           @id @default("global")
+  instanceName              String           @default("Kiri") @map("instance_name")
+  registrationMode          RegistrationMode @default(INVITE) @map("registration_mode")
+  autoSyncEnabled           Boolean          @default(false) @map("auto_sync_enabled")
+  autoSyncIntervalMinutes   Int              @default(1440) @map("auto_sync_interval_minutes")
+  verbosePluginLogging      Boolean          @default(false) @map("verbose_plugin_logging")
+  notificationRetentionDays Int              @default(90) @map("notification_retention_days")
+  jobLogRetentionDays       Int              @default(30) @map("job_log_retention_days")
+  updatedAt                 DateTime         @updatedAt @map("updated_at")
+
+  @@map("app_setting")
+}
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  actorId    String?  @map("actor_id")
+  action     String
+  targetType String   @map("target_type")
+  targetId   String?  @map("target_id")
+  metadata   Json     @default("{}")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  actor User? @relation(fields: [actorId], references: [id], onDelete: SetNull)
+
+  @@index([createdAt], map: "audit_log_created_at_idx")
+  @@index([actorId], map: "audit_log_actor_idx")
+  @@index([targetType, targetId], map: "audit_log_target_idx")
+  @@map("audit_log")
+}
+
+model ImportMapping {
+  id        String   @id @default(uuid())
+  runId     String   @map("run_id")
+  v1Table   String   @map("v1_table")
+  v1Id      String   @map("v1_id")
+  v2Model   String   @map("v2_model")
+  v2Id      String   @map("v2_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([v1Table, v1Id], map: "import_mapping_source_key")
+  @@index([runId], map: "import_mapping_run_idx")
+  @@index([v2Model, v2Id], map: "import_mapping_target_idx")
+  @@map("import_mapping")
+}

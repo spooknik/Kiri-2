@@ -1,0 +1,23 @@
+{
+  "id": "mangafire",
+  "name": "MangaFire",
+  "version": "0.1.0",
+  "sdk": "^2.0.0-alpha.0",
+  "entry": "./src/index.mjs",
+  "hosts": ["mangafire.to", "www.mangafire.to"],
+  "capabilities": ["network", "cookie"],
+  "mediaTypes": ["MANGA", "MANHWA", "MANHUA"],
+  "adult": false,
+  "homepage": "https://mangafire.to",
+  "license": "AGPL-3.0-only",
+  "minKiriVersion": "2.0.0",
+  "settings": [
+    {
+      "key": "language",
+      "type": "string",
+      "default": "en",
+      "label": "Translated language",
+      "description": "Language code to keep when a series tags chapters with more than one translation (e.g. \"en\", \"ja\"). Chapters without a language tag are always included — MangaFire normally renders only one language per request, matching the Kiri 1.x ripper."
+    }
+  ]
+}

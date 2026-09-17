@@ -1,0 +1,40 @@
+<!--
+  Trimmed copy of the real /series/<id>/full-chapter-list htmx fragment,
+  recorded once with curl on 2026-09-10 (-H "X-Requested-With: XMLHttpRequest").
+  The SVG "last read"/"new chapter" markers and the mark-as-read checkboxes
+  were stripped; the anchor/span/time shape the plugin parses is verbatim.
+-->
+<div class="flex items-center">
+    <a href="/chapters/01M21JX38XTD2PBZXJ2HRTF6MR" class="hover:bg-base-300 flex-1 flex items-center p-2">
+        <span class="me-2">
+            <img src="/static/images/chapter-badge.svg" alt="" width="16" height="16" class="w-4 h-4">
+        </span>
+        <span class="grow flex items-center gap-2">
+            <span class="">Chapter 3</span>
+        </span>
+        <time class="text-datetime opacity-50" datetime="2026-09-08T22:41:01.213Z">2026-09-08T22:41:01.213623Z</time>
+    </a>
+</div>
+<div class="flex items-center">
+    <a href="/chapters/01M21JWW0WQF6WDWV1AZSGP5EP" class="hover:bg-base-300 flex-1 flex items-center p-2">
+        <span class="me-2">
+            <img src="/static/images/chapter-badge.svg" alt="" width="16" height="16" class="w-4 h-4">
+        </span>
+        <span class="grow flex items-center gap-2">
+            <span class="">Chapter 2</span>
+        </span>
+        <time class="text-datetime opacity-50" datetime="2026-09-08T22:40:53.788Z">2026-09-08T22:40:53.788956Z</time>
+    </a>
+</div>
+<div class="flex items-center">
+    <a href="/chapters/01M1RVJCXC2S6CEPE3Z7WS3GVE" class="hover:bg-base-300 flex-1 flex items-center p-2">
+        <span class="me-2">
+            <img src="/static/images/chapter-badge.svg" alt="" width="16" height="16" class="w-4 h-4">
+        </span>
+        <span class="grow flex items-center gap-2">
+            <span class="">Chapter 1</span>
+        </span>
+        <time class="text-datetime opacity-50" datetime="2026-09-05T13:19:17.932Z">2026-09-05T13:19:17.932247Z</time>
+    </a>
+</div>
+<a href="#top" class="bg-secondary opacity-30 hover:opacity-70 fixed bottom-12 right-0 p-4" aria-label="back to top"></a>

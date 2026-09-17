@@ -1,0 +1,169 @@
+<!--
+  Trimmed copy of a real WeebCentral series page, recorded once with curl on
+  2026-09-10 (https://weebcentral.com/series/01M1RVH8101S8AMAE8WHDWQ8AK/still-you).
+  Scripts, styles, nav chrome and the subscribe/comment widgets were stripped;
+  the meta tags, heading, Type/Status fields and #chapter-list markup are kept
+  verbatim so the plugin's regex parsing exercises the real shapes. The cover
+  meta was repointed at a local fixture image instead of the live CDN.
+-->
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Still You | Weeb Central</title>
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Weeb Central" />
+    <meta property="og:title" content="Still You | Weeb Central" />
+    <meta
+      property="og:description"
+      content="Read Still You Manga online for free at Weeb Central"
+    />
+    <meta
+      property="og:url"
+      content="https://weebcentral.com/series/01M1RVH8101S8AMAE8WHDWQ8AK/still-you"
+    />
+    <meta property="og:image" content="/img/cover.png" />
+    <meta property="og:image:width" content="40" />
+    <meta property="og:image:height" content="60" />
+  </head>
+  <body>
+    <main>
+      <div id="top">
+        <section>
+          <section>
+            <h1 class="md:hidden text-2xl font-bold text-center">Still You</h1>
+            <section class="flex items-center justify-center">
+              <picture>
+                <img src="/img/cover.png" alt="Still You cover" width="40" height="60" />
+              </picture>
+            </section>
+            <h1 class="hidden md:block text-2xl font-bold">Still You</h1>
+            <section>
+              <ul class="flex flex-col gap-4">
+                <li>
+                  <strong>Author(s): </strong>
+                  <span
+                    ><a
+                      href="https://weebcentral.com/search?author=NISHIO+Kami"
+                      class="link link-info link-hover"
+                      >NISHIO Kami</a
+                    ></span
+                  >
+                </li>
+                <li>
+                  <strong>Tags(s): </strong>
+                  <span
+                    ><a
+                      href="https://weebcentral.com/search?included_tag=Drama"
+                      class="link link-info link-hover"
+                      >Drama</a
+                    >,</span
+                  >
+                  <span
+                    ><a
+                      href="https://weebcentral.com/search?included_tag=Romance"
+                      class="link link-info link-hover"
+                      >Romance</a
+                    ></span
+                  >
+                </li>
+                <li>
+                  <strong>Type: </strong>
+                  <a
+                    href="https://weebcentral.com/search?included_type=Manga"
+                    class="link link-info link-hover"
+                    >Manga</a
+                  >
+                </li>
+                <li>
+                  <strong>Status: </strong>
+                  <a
+                    href="https://weebcentral.com/search?included_status=Ongoing"
+                    class="link link-info link-hover"
+                    >Ongoing</a
+                  >
+                </li>
+                <li>
+                  <strong>Released: </strong>
+                  <span>2026</span>
+                </li>
+              </ul>
+            </section>
+          </section>
+          <section>
+            <section x-data="{ mark_chapters: 'null' }">
+              <div id="chapter-list" class="flex flex-col mt-2 divide-y divide-slate-500">
+                <div class="flex items-center">
+                  <a
+                    href="/chapters/01M21JX38XTD2PBZXJ2HRTF6MR"
+                    class="hover:bg-base-300 flex-1 flex items-center p-2"
+                  >
+                    <span class="me-2">
+                      <img
+                        src="/static/images/chapter-badge.svg"
+                        alt=""
+                        width="16"
+                        height="16"
+                        class="w-4 h-4"
+                      />
+                    </span>
+                    <span class="grow flex items-center gap-2">
+                      <span class="">Chapter 3</span>
+                    </span>
+                    <time class="text-datetime opacity-50" datetime="2026-09-08T22:41:01.213Z"
+                      >2026-09-08T22:41:01.213623Z</time
+                    >
+                  </a>
+                </div>
+                <div class="flex items-center">
+                  <a
+                    href="/chapters/01M21JWW0WQF6WDWV1AZSGP5EP"
+                    class="hover:bg-base-300 flex-1 flex items-center p-2"
+                  >
+                    <span class="me-2">
+                      <img
+                        src="/static/images/chapter-badge.svg"
+                        alt=""
+                        width="16"
+                        height="16"
+                        class="w-4 h-4"
+                      />
+                    </span>
+                    <span class="grow flex items-center gap-2">
+                      <span class="">Chapter 2</span>
+                    </span>
+                    <time class="text-datetime opacity-50" datetime="2026-09-08T22:40:53.788Z"
+                      >2026-09-08T22:40:53.788956Z</time
+                    >
+                  </a>
+                </div>
+                <div class="flex items-center">
+                  <a
+                    href="/chapters/01M1RVJCXC2S6CEPE3Z7WS3GVE"
+                    class="hover:bg-base-300 flex-1 flex items-center p-2"
+                  >
+                    <span class="me-2">
+                      <img
+                        src="/static/images/chapter-badge.svg"
+                        alt=""
+                        width="16"
+                        height="16"
+                        class="w-4 h-4"
+                      />
+                    </span>
+                    <span class="grow flex items-center gap-2">
+                      <span class="">Chapter 1</span>
+                    </span>
+                    <time class="text-datetime opacity-50" datetime="2026-09-05T13:19:17.932Z"
+                      >2026-09-05T13:19:17.932247Z</time
+                    >
+                  </a>
+                </div>
+              </div>
+            </section>
+          </section>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>

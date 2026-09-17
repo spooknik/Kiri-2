@@ -1,0 +1,12 @@
+{
+  "name": "kiri-prisma-runtime",
+  "private": true,
+  "description": "Not a workspace member. A minimal, standalone install of just the packages `prisma migrate deploy` needs at container startup (see docker/Dockerfile and docker/entrypoint.sh). Versions are kept in lockstep with apps/web/package.json.",
+  "dependencies": {
+    "prisma": "^7.10.0",
+    "@prisma/client": "^7.10.0",
+    "@prisma/adapter-pg": "^7.10.0",
+    "pg": "^8.23.0",
+    "dotenv": "^17.4.2"
+  }
+}

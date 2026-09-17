@@ -1,0 +1,102 @@
+name: Publish GHCR image
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Base image: plain HTTP content-source plugins only, no browser.
+          - target: runner
+            releaseTag: latest
+            shaSuffix: ""
+            versionSuffix: ""
+          # `runner` + Playwright's own Chromium, for plugins that declare the
+          # `browser` capability (see docker/Dockerfile's `browser` stage).
+          - target: browser
+            releaseTag: latest-browser
+            shaSuffix: "-browser"
+            versionSuffix: "-browser"
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Normalize image name
+        id: image
+        shell: bash
+        run: |
+          owner="${GITHUB_REPOSITORY_OWNER,,}"
+          repo="${GITHUB_REPOSITORY#*/}"
+          echo "name=ghcr.io/${owner}/${repo,,}" >> "$GITHUB_OUTPUT"
+
+      - name: Determine app version
+        id: version
+        shell: bash
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            version="${GITHUB_REF#refs/tags/v}"
+          else
+            # Manual (workflow_dispatch) run not on a tag: no `latest`/version
+            # tag below gets applied, only the sha tag, so this just has to be
+            # a legible value for the NEXT_PUBLIC_APP_VERSION build arg.
+            version="0.0.0-${GITHUB_SHA::7}"
+          fi
+          echo "value=${version}" >> "$GITHUB_OUTPUT"
+          echo "isTag=$([[ "$GITHUB_REF" == refs/tags/v* ]] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Generate image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.image.outputs.name }}
+          tags: |
+            type=raw,value=${{ matrix.releaseTag }}
+            type=sha,prefix=sha-,suffix=${{ matrix.shaSuffix }}
+            type=raw,value=${{ steps.version.outputs.value }}${{ matrix.versionSuffix }},enable=${{ steps.version.outputs.isTag }}
+          labels: |
+            org.opencontainers.image.title=Kiri
+            org.opencontainers.image.description=Self-hosted collaborative reading tracker and offline-first web reader
+            org.opencontainers.image.source=${{ github.server_url }}/${{ github.repository }}
+            org.opencontainers.image.version=${{ steps.version.outputs.value }}
+
+      - name: Build and publish image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/Dockerfile
+          target: ${{ matrix.target }}
+          push: true
+          # linux/amd64 only for now. To add arm64, add it to this list and
+          # confirm the `browser` target's Playwright/Chromium download and
+          # `install-deps` apt packages have arm64 builds available (they do
+          # today, but this hasn't been validated against this Dockerfile) —
+          # multi-platform pushes also need QEMU
+          # (`docker/setup-qemu-action@v3`) alongside Buildx above.
+          platforms: linux/amd64
+          build-args: |
+            NEXT_PUBLIC_APP_VERSION=${{ steps.version.outputs.value }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.target }}
+          cache-to: type=gha,mode=min,scope=${{ matrix.target }}

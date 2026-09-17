@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Kiri Cookie Bridge — Options</title>
+    <link rel="stylesheet" href="theme.css" />
+    <style>
+      body {
+        max-width: 560px;
+        margin: 0 auto;
+        padding: 1.75rem 1.25rem 2.5rem;
+      }
+      .intro {
+        margin: 0.9rem 0 1.25rem;
+      }
+      .actions {
+        display: flex;
+        gap: 0.6rem;
+        margin-top: 1.3rem;
+        flex-wrap: wrap;
+      }
+      #status {
+        margin-top: 1rem;
+      }
+      .hosts {
+        margin-top: 1.25rem;
+      }
+      .hosts-list {
+        margin-top: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.4rem;
+      }
+      .host-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+        font-size: 0.82rem;
+        padding: 0.4rem 0;
+        border-bottom: 1px solid var(--card-border);
+      }
+      .host-row:last-child {
+        border-bottom: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path d="M12 7v14" />
+          <path
+            d="M3 18a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5a1 1 0 0 1 1 1v13a1 1 0 0 1-1 1h-6a3 3 0 0 0-3 3 3 3 0 0 0-3-3z"
+          />
+        </svg>
+      </span>
+      <div>
+        <div class="brand-title">Kiri</div>
+        <div class="brand-sub">Cookie Bridge</div>
+      </div>
+    </div>
+
+    <p class="intro hint">
+      This extension asks your Kiri instance which sites its installed plugins need cookies for,
+      then — once you grant it access to a site from the toolbar popup — sends that site's cookies
+      and User-Agent to Kiri automatically, so cookie-gated syncs work without pasting a cookie by
+      hand.
+    </p>
+
+    <div class="card">
+      <label for="instanceUrl">Kiri instance URL</label>
+      <input id="instanceUrl" type="url" placeholder="http://192.168.1.50:3000" />
+      <div class="hint">The address you open Kiri at — no trailing slash needed.</div>
+
+      <label for="token">Extension token</label>
+      <input id="token" type="password" placeholder="Paste the token from Admin → Plugins" />
+      <div class="hint">
+        Find it on your Kiri instance under <strong>Admin → Plugins</strong>. It rotates if
+        <code>APP_SECRET</code> changes on the server.
+      </div>
+
+      <div class="actions">
+        <button id="save">Save</button>
+        <button id="test" class="secondary">Test connection</button>
+      </div>
+
+      <div id="status" class="status"></div>
+    </div>
+
+    <div class="hosts">
+      <label style="margin: 0 0 0.3rem">Sites your plugins need</label>
+      <div class="hint">
+        Grant per-site access from the toolbar popup — this page only manages the connection to Kiri
+        itself.
+      </div>
+      <div id="hostsList" class="hosts-list"></div>
+    </div>
+
+    <script type="module" src="options.js"></script>
+  </body>
+</html>

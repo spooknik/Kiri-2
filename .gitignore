@@ -1,0 +1,44 @@
+# dependencies
+node_modules/
+
+# build output
+.next/
+out/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# generated
+apps/web/src/generated/
+apps/web/public/sw.js
+apps/web/public/sw.js.map
+apps/web/public/swe-worker-*.js
+
+# tests
+coverage/
+playwright-report/
+test-results/
+blob-report/
+apps/web/e2e/.e2e-state.json
+apps/web/.data-e2e/
+
+# local data (embedded postgres, library, covers, plugins)
+.pgdata*/
+data/
+
+# env files
+.env
+.env.*
+!.env.example
+
+# os / editor
+.DS_Store
+Thumbs.db
+nul
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# logs
+npm-debug.log*
+*.log

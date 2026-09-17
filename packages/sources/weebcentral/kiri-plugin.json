@@ -1,0 +1,14 @@
+{
+  "id": "weebcentral",
+  "name": "WeebCentral",
+  "version": "0.1.0",
+  "sdk": "^2.0.0-alpha.0",
+  "entry": "./src/index.mjs",
+  "hosts": ["weebcentral.com", "www.weebcentral.com"],
+  "capabilities": ["network"],
+  "mediaTypes": ["MANGA", "MANHWA", "MANHUA"],
+  "adult": false,
+  "homepage": "https://weebcentral.com",
+  "license": "AGPL-3.0-only",
+  "minKiriVersion": "2.0.0"
+}

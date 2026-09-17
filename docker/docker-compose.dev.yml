@@ -1,0 +1,32 @@
+# Kiri 2.0 - dev database only.
+#
+# For developers who'd rather run PostgreSQL in Docker than the embedded server
+# `npm run db:dev` starts. Matches apps/web/.env.example's default
+# DATABASE_URL exactly, so nothing else needs to change.
+#
+# Usage:
+#   docker compose -f docker/docker-compose.dev.yml up -d
+#   cp apps/web/.env.example apps/web/.env   # then set APP_SECRET
+#   npm run db:migrate
+#   npm run dev
+
+services:
+  db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: kiri
+      POSTGRES_USER: kiri
+      POSTGRES_PASSWORD: kiri
+    volumes:
+      - kiri_dev_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U kiri -d kiri"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  kiri_dev_pgdata:

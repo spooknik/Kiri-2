@@ -1,0 +1,11 @@
+<!--
+  Trimmed copy of the real /chapters/<id>/images?is_prev=False&current_page=1&reading_style=long_strip
+  htmx fragment, recorded once with curl on 2026-09-10. The real chapter had
+  43 <img> tags; only 3 are kept here, repointed at local fixture PNGs instead
+  of the live scans.lastation.us CDN.
+-->
+<section id="chapter-images" class="w-full flex-1 flex flex-col pb-4 cursor-pointer">
+	<img src="/img/p1.png" class="max-w-full h-auto mx-auto" alt="Page 1" loading="lazy" />
+	<img src="/img/p2.png" class="max-w-full h-auto mx-auto" alt="Page 2" loading="lazy" />
+	<img src="/img/p3.png" class="max-w-full h-auto mx-auto" alt="Page 3" loading="lazy" />
+</section>

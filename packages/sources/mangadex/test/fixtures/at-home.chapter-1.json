@@ -1,0 +1,9 @@
+{
+  "result": "ok",
+  "baseUrl": "__BASE_URL__",
+  "chapter": {
+    "hash": "f478c66ecb50c5a0e02fee8e78f84341",
+    "data": ["page-1.png", "page-2.png", "page-3.png"],
+    "dataSaver": ["saver-1.png", "saver-2.png", "saver-3.png"]
+  }
+}

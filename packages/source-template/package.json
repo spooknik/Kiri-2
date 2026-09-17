@@ -1,0 +1,25 @@
+{
+  "name": "@kiri/source-template",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Example Kiri content-source plugin; also the e2e fixture site ripper",
+  "license": "MIT",
+  "type": "module",
+  "dependencies": {
+    "@kiri/source-sdk": "*"
+  },
+  "scripts": {
+    "serve": "node serve.mjs",
+    "hello": "node src/index.mjs hello"
+  },
+  "files": [
+    "kiri-plugin.json",
+    "src",
+    "fixture-site",
+    "serve.mjs",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  }
+}

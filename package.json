@@ -1,0 +1,32 @@
+{
+  "name": "kiri-monorepo",
+  "version": "2.0.0-alpha.0",
+  "private": true,
+  "description": "Kiri — self-hosted collaborative reading tracker and offline reader",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "packages/sources/*"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "npm run dev -w apps/web",
+    "build": "npm run build -w packages/source-sdk && npm run build -w apps/web",
+    "start": "npm run start -w apps/web",
+    "lint": "npm run lint --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "test:e2e": "npm run test:e2e -w apps/web",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "db:dev": "npm run db:dev -w apps/web",
+    "db:migrate": "npm run db:migrate -w apps/web",
+    "plugin:zip": "node scripts/pack-plugin.mjs"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6"
+  },
+  "license": "AGPL-3.0-only"
+}

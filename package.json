@@ -1,6 +1,6 @@
 {
   "name": "kiri-monorepo",
-  "version": "2.0.0-alpha.0",
+  "version": "2.0.0-alpha.1",
   "private": true,
   "description": "Kiri — self-hosted collaborative reading tracker and offline reader",
   "workspaces": [

@@ -4,6 +4,31 @@ All notable changes to Kiri are documented here. Kiri 2.0 is a ground-up
 rewrite of Kiri 1.x (`readingtracker`) in a new repository — see "Breaking vs
 1.x" below before treating this as an upgrade.
 
+## 2.0.0-alpha.1 (2026-09-30)
+
+### Auth
+
+- Password reset links: Admin → Users → **Reset password** issues a
+  one-time link (72 h, single use, stored hashed) for any other user, to hand
+  over like an invite — Kiri still sends no email. Redeeming it at
+  `/reset-password` signs that account out everywhere.
+- Break-glass reset for any account, admins included:
+  `node /app/reset-password.mjs <email>` inside the container (see
+  docs/DEPLOY.md → Password resets).
+- Profile changes to `showAdult` / display name take effect on the next
+  request instead of after the 60 s session cookie cache expires.
+
+### Library
+
+- Library cards are all the same height; 18+, Book club and Private moved onto
+  the cover.
+- Long-press the header mascot to toggle adult content ("spicy mode", back from
+  Kiri 1.x). It flips the profile's **Show adult content** setting; with it
+  off, the library and continue-reading hide every adult series, including
+  ones you added.
+- The series page has a full-width Continue / Start reading button under the
+  title.
+
 ## 2.0.0-alpha.0 (unreleased)
 
 Initial alpha of the Kiri 2.0 rewrite: real accounts, a plugin system for

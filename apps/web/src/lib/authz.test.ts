@@ -3,6 +3,7 @@ import { ApiError } from "@/lib/api";
 import {
   assertCanEditSeries,
   assertCanViewSeries,
+  browseSeriesWhere,
   canEditSeries,
   canViewSeries,
   requireAdmin,
@@ -133,5 +134,18 @@ describe("visibleSeriesWhere", () => {
     expect(visibleSeriesWhere(admin)).toEqual(
       visibleSeriesWhere(user({ id: "admin-1", role: "member" })),
     );
+  });
+});
+
+describe("browseSeriesWhere", () => {
+  it("hides every adult series, the viewer's own included, when showAdult is off", () => {
+    expect(browseSeriesWhere(user())).toEqual({
+      AND: [visibleSeriesWhere(user()), { isAdult: false }],
+    });
+  });
+
+  it("is just the visibility filter when showAdult is on", () => {
+    const viewer = user({ showAdult: true });
+    expect(browseSeriesWhere(viewer)).toEqual(visibleSeriesWhere(viewer));
   });
 });

@@ -222,12 +222,15 @@ describe("GET /api/library visibility", () => {
     expect(titles(await library({ scope: "all", sort: "title" }))).toEqual(["Adult", "Safe"]);
   });
 
-  it("still shows the creator their own adult series", async () => {
+  it("hides the creator's own adult series too when showAdult is off", async () => {
     const author = await createTestUser({ showAdult: false });
     await seedSeries({ title: "Mine adult", createdBy: author, isAdult: true });
+    await seedSeries({ title: "Mine safe", createdBy: author });
 
     mockCurrentUser(author);
-    expect(titles(await library({ scope: "all" }))).toEqual(["Mine adult"]);
+    const page = await library({ scope: "all" });
+    expect(titles(page)).toEqual(["Mine safe"]);
+    expect(page.total).toBe(1);
   });
 
   it("honours adult=only and adult=exclude for opted-in readers", async () => {

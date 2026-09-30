@@ -7,12 +7,14 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createTestUser, mockCurrentUser, resetDatabase, routeContext } from "../../test/factories";
 import { GET as getRoute, PATCH as patchRoute } from "@/app/api/profile/route";
 import type { ProfileView } from "@/lib/contracts/profile";
+import { refreshSessionCache } from "@/lib/auth/session";
 import { getProfile, updateProfile } from "@/lib/profile";
 import { prisma } from "@/lib/prisma";
 
 vi.mock("@/lib/auth/session", async (importOriginal) => ({
   ...(await importOriginal<typeof import("@/lib/auth/session")>()),
   getCurrentUser: vi.fn(),
+  refreshSessionCache: vi.fn(),
 }));
 
 const ORIGIN = "http://localhost:3000";
@@ -34,6 +36,7 @@ function patchRequest(body: unknown): NextRequest {
 
 beforeEach(async () => {
   await resetDatabase();
+  vi.mocked(refreshSessionCache).mockClear();
 });
 
 describe("getProfile", () => {
@@ -154,6 +157,8 @@ describe("routes", () => {
     // The schema trims before it reaches the database.
     expect(body.displayName).toBe("Renamed");
     expect(body.showAdult).toBe(true);
+    // Both fields ride in the session cookie cache.
+    expect(refreshSessionCache).toHaveBeenCalled();
   });
 
   it("PATCH rejects an empty display name", async () => {

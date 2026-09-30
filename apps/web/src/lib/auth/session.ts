@@ -67,6 +67,16 @@ export const getCurrentUser = cache(async (): Promise<SessionUser | null> => {
   return getUserFromHeaders(await headers());
 });
 
+/**
+ * Re-read the session from the database and rewrite the 60 s cookie cache
+ * (better-auth's `nextCookies` plugin applies the Set-Cookie). Call after a
+ * route changes a user field the session carries — otherwise the next few
+ * requests still see the old `showAdult` / `displayName`.
+ */
+export async function refreshSessionCache(): Promise<void> {
+  await auth.api.getSession({ headers: await headers(), query: { disableCookieCache: true } });
+}
+
 /** Like getCurrentUser but throws an UnauthorizedError when signed out. */
 export async function requireUser(): Promise<SessionUser> {
   const user = await getCurrentUser();

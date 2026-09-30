@@ -13,6 +13,7 @@ import { ConfirmDialog } from "./confirm-dialog";
 import { EditSeriesDialog } from "./edit-series-dialog";
 import { MembersCard } from "./members-card";
 import { ProgressCard } from "./progress-card";
+import { ReadButton } from "./read-button";
 import { SeriesNotFound } from "./series-not-found";
 import { TrackSeriesCard } from "./track-series-card";
 
@@ -69,6 +70,10 @@ export function SeriesView({ id }: SeriesViewProps) {
             {series.isBookClub ? <Badge tone="neutral">Book club</Badge> : null}
             {series.visibility === "PRIVATE" ? <Badge tone="neutral">Private</Badge> : null}
             {series.isAdult ? <Badge tone="danger">18+</Badge> : null}
+          </div>
+
+          <div className="my-1">
+            <ReadButton seriesId={series.id} />
           </div>
 
           <p className="text-sm text-muted">Added by {series.createdBy.displayName}</p>

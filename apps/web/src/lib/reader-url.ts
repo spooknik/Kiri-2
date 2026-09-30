@@ -1,6 +1,6 @@
 /**
  * Pure `/read?series=&chapter=&page=` URL builders shared by the series
- * page's "Continue reading" button (`ChaptersSection`) and the dashboard's
+ * page's read button (`ReadButton`) and the dashboard's
  * `ContinueReading` strip. Dependency-free and easily unit-tested — see
  * `reader-url.test.ts`.
  */

@@ -12,7 +12,7 @@
 import type { Prisma } from "@/generated/prisma/client";
 import { badRequest, notFound } from "@/lib/api";
 import type { SessionUser } from "@/lib/auth/types";
-import { assertCanViewSeries, visibleSeriesWhere } from "@/lib/authz";
+import { assertCanViewSeries, browseSeriesWhere } from "@/lib/authz";
 import { getChapterListItem } from "@/lib/content/chapters";
 import type {
   ChapterListItem,
@@ -172,7 +172,7 @@ export async function continueReading(
   limit: number = DEFAULT_CONTINUE_LIMIT,
 ): Promise<ContinueReadingResponse> {
   const rows = await prisma.readingPosition.findMany({
-    where: { userId: user.id, series: visibleSeriesWhere(user) },
+    where: { userId: user.id, series: browseSeriesWhere(user) },
     orderBy: { updatedAt: "desc" },
     take: Math.max(1, limit),
     select: {

@@ -1,7 +1,7 @@
 /**
  * The library list: filter, full-text search, sort and paginate, all in
  * PostgreSQL. V1 fetched everything and filtered adult content in the browser
- * (`library-list.tsx:324`); here `visibleSeriesWhere` is ANDed into every
+ * (`library-list.tsx:324`); here `browseSeriesWhere` is ANDed into every
  * query, so a row the user may not see never leaves the database.
  *
  * Three page-selection strategies, one result shape:
@@ -14,7 +14,7 @@
 import type { Prisma } from "@/generated/prisma/client";
 import { badRequest } from "@/lib/api";
 import type { SessionUser } from "@/lib/auth/types";
-import { visibleSeriesWhere } from "@/lib/authz";
+import { browseSeriesWhere } from "@/lib/authz";
 import {
   READING_STATUSES,
   type LibraryPage,
@@ -79,7 +79,7 @@ export async function listLibrary(user: SessionUser, query: LibraryQuery): Promi
   const [page, total, statusCounts] = await Promise.all([
     selectPage(user, query, where, sort, cursor, ranked),
     prisma.series.count({ where }),
-    loadStatusCounts(user.id),
+    loadStatusCounts(user),
   ]);
 
   return {
@@ -95,7 +95,7 @@ export async function listLibrary(user: SessionUser, query: LibraryQuery): Promi
 /* -------------------------------------------------------------------------- */
 
 /**
- * Every filter as one AND list. `visibleSeriesWhere` is always the first
+ * Every filter as one AND list. `browseSeriesWhere` is always the first
  * element and is never conditional.
  */
 function buildWhere(
@@ -103,7 +103,7 @@ function buildWhere(
   query: LibraryQuery,
   matchedIds: string[] | null,
 ): Prisma.SeriesWhereInput {
-  const filters: Prisma.SeriesWhereInput[] = [visibleSeriesWhere(user)];
+  const filters: Prisma.SeriesWhereInput[] = [browseSeriesWhere(user)];
 
   // status and favorite are properties of *my* entry, so they imply tracking.
   const entry: Prisma.LibraryEntryWhereInput = { userId: user.id };
@@ -123,8 +123,7 @@ function buildWhere(
   if (query.tag) filters.push({ tags: { has: query.tag } });
   if (query.bookClub === "1") filters.push({ isBookClub: true });
 
-  // For everyone else `visibleSeriesWhere` has already removed adult series,
-  // so the toggle would only be able to hide their own.
+  // For everyone else `browseSeriesWhere` has already removed adult series.
   if (user.showAdult) {
     if (query.adult === "exclude") filters.push({ isAdult: false });
     if (query.adult === "only") filters.push({ isAdult: true });
@@ -135,10 +134,10 @@ function buildWhere(
   return { AND: filters };
 }
 
-async function loadStatusCounts(userId: string): Promise<Record<ReadingStatus, number>> {
+async function loadStatusCounts(user: SessionUser): Promise<Record<ReadingStatus, number>> {
   const grouped = await prisma.libraryEntry.groupBy({
     by: ["status"],
-    where: { userId },
+    where: { userId: user.id, series: browseSeriesWhere(user) },
     _count: { _all: true },
   });
   const counts = Object.fromEntries(READING_STATUSES.map((status) => [status, 0])) as Record<

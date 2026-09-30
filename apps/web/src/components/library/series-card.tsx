@@ -1,7 +1,7 @@
 "use client";
 
 import type { MouseEvent } from "react";
-import { Check, Users } from "lucide-react";
+import { Check, Lock, Users } from "lucide-react";
 import { AppLink } from "@/components/shell/app-link";
 import { Badge, Button, type BadgeTone } from "@/components/ui";
 import { useUpdateEntry } from "@/hooks/use-entry";
@@ -75,6 +75,29 @@ export function SeriesCard({
         ) : (
           <CoverPlaceholder title={series.title} mediaType={series.mediaType} />
         )}
+        {series.isAdult || series.isBookClub || series.visibility === "PRIVATE" ? (
+          <div className="absolute right-1.5 top-1.5 flex flex-col items-end gap-1">
+            {series.isBookClub ? (
+              <Badge tone="primary" className="bg-primary px-1.5 text-white shadow">
+                Book club
+              </Badge>
+            ) : null}
+            {series.isAdult ? (
+              <Badge tone="danger" className="bg-danger px-1.5 text-white shadow">
+                18+
+              </Badge>
+            ) : null}
+            {series.visibility === "PRIVATE" ? (
+              <span
+                title="Private"
+                className="flex h-5 w-5 items-center justify-center rounded-full bg-black/60 text-white shadow"
+              >
+                <Lock className="h-3 w-3" aria-hidden="true" />
+                <span className="sr-only">Private</span>
+              </span>
+            ) : null}
+          </div>
+        ) : null}
         {selectable ? (
           <>
             <span
@@ -99,30 +122,31 @@ export function SeriesCard({
         ) : null}
       </div>
 
+      {/* Every line below is always rendered and clipped to one row, so all
+          cards in the grid come out the same height. */}
       <div className="mt-2 flex flex-col gap-1">
-        <div className="flex flex-wrap items-center gap-1">
-          <Badge tone="neutral">{MEDIA_TYPE_LABELS[series.mediaType]}</Badge>
+        <div className="flex h-5 items-center gap-1 overflow-hidden">
+          <Badge tone="neutral" className="shrink-0">
+            {MEDIA_TYPE_LABELS[series.mediaType]}
+          </Badge>
           {entry ? (
-            <Badge tone={STATUS_TONE[entry.status]}>{READING_STATUS_LABELS[entry.status]}</Badge>
+            <Badge tone={STATUS_TONE[entry.status]} className="shrink-0">
+              {READING_STATUS_LABELS[entry.status]}
+            </Badge>
           ) : null}
-          {series.isBookClub ? <Badge tone="primary">Book club</Badge> : null}
-          {series.visibility === "PRIVATE" ? <Badge tone="neutral">Private</Badge> : null}
-          {series.isAdult ? <Badge tone="danger">18+</Badge> : null}
         </div>
 
         <p className="truncate text-sm font-semibold leading-tight text-foreground">
           {series.title}
         </p>
-        {series.originalTitle ? (
-          <p className="truncate text-xs text-muted">{series.originalTitle}</p>
-        ) : null}
+        <p className="truncate text-xs text-muted">{series.originalTitle || "\u00a0"}</p>
 
-        <p className="text-xs tabular-nums text-muted">
+        <p className="truncate text-xs tabular-nums text-muted">
           {entry
             ? `Ch. ${formatChapterNumber(entry.currentChapter)} / ${chapterTotal ?? "?"}`
             : chapterTotal
               ? `${chapterTotal} chapters`
-              : null}
+              : "\u00a0"}
         </p>
 
         <div className="flex items-center justify-between gap-2 text-[11px] text-muted">
@@ -146,7 +170,7 @@ export function SeriesCard({
         aria-pressed={selected}
         aria-label={`Select ${series.title}`}
         className={cn(
-          "focus-ring min-h-11 rounded-lg border p-2 text-left transition-colors",
+          "focus-ring flex h-full min-h-11 flex-col rounded-lg border p-2 text-left transition-colors",
           selected
             ? "border-primary bg-primary/5"
             : "border-card-border bg-card hover:border-primary/30",
@@ -160,10 +184,10 @@ export function SeriesCard({
   return (
     <AppLink
       href={`/series/${series.id}`}
-      className="focus-ring block min-h-11 rounded-lg border border-card-border bg-card p-2 transition-colors hover:border-primary/30"
+      className="focus-ring flex h-full min-h-11 flex-col rounded-lg border border-card-border bg-card p-2 transition-colors hover:border-primary/30"
     >
       {body}
-      <div className="mt-2">
+      <div className="mt-auto pt-2">
         {entry ? (
           <Button
             type="button"

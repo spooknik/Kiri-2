@@ -79,3 +79,15 @@ export function visibleSeriesWhere(user: SessionUser): Prisma.SeriesWhereInput {
     ...(user.showAdult ? {} : { AND: [{ OR: [{ isAdult: false }, { createdById: user.id }] }] }),
   };
 }
+
+/**
+ * `where` fragment for browsing surfaces — the library grid, its counts and the
+ * continue-reading strip. Stricter than {@link visibleSeriesWhere}: with
+ * showAdult off, adult series are hidden even from their creator, so the
+ * header's show/hide toggle hides everything tagged 18+. Direct access (the
+ * series page, the reader, jobs) keeps the creator exception.
+ */
+export function browseSeriesWhere(user: SessionUser): Prisma.SeriesWhereInput {
+  const visible = visibleSeriesWhere(user);
+  return user.showAdult ? visible : { AND: [visible, { isAdult: false }] };
+}

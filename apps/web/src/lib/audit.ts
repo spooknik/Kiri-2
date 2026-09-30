@@ -16,6 +16,8 @@ export const AUDIT_ACTIONS = {
   userRole: "user.role",
   userBan: "user.ban",
   userUnban: "user.unban",
+  passwordResetIssue: "user.password_reset_issue",
+  passwordReset: "user.password_reset",
   inviteCreate: "invite.create",
   inviteRevoke: "invite.revoke",
   settingsUpdate: "settings.update",

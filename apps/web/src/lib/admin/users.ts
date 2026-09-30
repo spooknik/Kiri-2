@@ -8,6 +8,9 @@
  * same through the internal adapter, otherwise an already-signed-in session
  * would keep working until it expired.
  *
+ * Password resets hand back a one-time link (src/lib/auth/password-reset.ts)
+ * for the admin to pass on, since Kiri sends no email.
+ *
  * Two guard rails, both 400s:
  *  - an admin cannot change their own role or ban themselves (V1 had no such
  *    check and a mis-click locked the owner out);
@@ -16,10 +19,11 @@
  */
 import type { Prisma } from "@/generated/prisma/client";
 import { badRequest, notFound } from "@/lib/api";
+import { createPasswordReset } from "@/lib/auth/password-reset";
 import { auth } from "@/lib/auth/server";
 import type { SessionUser, UserRole } from "@/lib/auth/types";
 import { AUDIT_ACTIONS, AUDIT_TARGETS, recordAudit } from "@/lib/audit";
-import type { AdminUserView, UpdateUserInput } from "@/lib/contracts/admin";
+import type { AdminUserView, PasswordResetLinkView, UpdateUserInput } from "@/lib/contracts/admin";
 import { prisma } from "@/lib/prisma";
 
 const adminUserSelect = {
@@ -168,4 +172,23 @@ export async function updateAdminUser(
   }
 
   return toView(updated);
+}
+
+/**
+ * Issue a one-time password reset link for another user. Not for your own
+ * account: a hijacked admin session could otherwise turn into a permanent
+ * takeover that locks the owner out. Resetting your own password goes through
+ * the container CLI (docs/DEPLOY.md), which needs shell access to the host.
+ */
+export async function issuePasswordReset(
+  actor: SessionUser,
+  targetId: string,
+): Promise<PasswordResetLinkView> {
+  if (targetId === actor.id) {
+    throw badRequest(
+      "You can't reset your own password here. Run reset-password.mjs in the container instead.",
+    );
+  }
+  const created = await createPasswordReset({ userId: targetId, actorId: actor.id, via: "admin" });
+  return { url: created.url, expiresAt: created.expiresAt.toISOString() };
 }

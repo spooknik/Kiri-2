@@ -27,6 +27,7 @@ import type {
   AuditPage,
   CreateInviteInput,
   InviteView,
+  PasswordResetLinkView,
   UpdateSettingsInput,
   UpdateUserInput,
 } from "@/lib/contracts";
@@ -57,6 +58,17 @@ export function useUpdateAdminUser(): UseMutationResult<
         current ? current.map((user) => (user.id === data.id ? data : user)) : current,
       );
     },
+  });
+}
+
+/** POST /api/admin/users/:id/password-reset — the returned link is shown once. */
+export function useIssuePasswordReset(): UseMutationResult<
+  PasswordResetLinkView,
+  ApiClientError,
+  string
+> {
+  return useMutation<PasswordResetLinkView, ApiClientError, string>({
+    mutationFn: (id) => api.post<PasswordResetLinkView>(`/api/admin/users/${id}/password-reset`),
   });
 }
 

@@ -241,6 +241,34 @@ Back up both together (a DB restore that references chapters/covers not
 present on disk — or vice versa — is inconsistent); stopping the `app`
 service first avoids the small race of a backup mid-write.
 
+## Password resets
+
+Kiri sends no email, so a forgotten password is reset with a one-time link
+that is handed over by hand, just like an invite. Redeeming it at
+`/reset-password` sets the new password and signs that account out on every
+device. Links expire after 72 hours, only work once, and issuing a new one
+cancels the previous one. Only a hash of each link is stored.
+
+- **Someone else's password:** Admin → Users → **Reset password** on their
+  row, then send them the link.
+- **Your own (or any) password, including an admin's:** the web UI won't reset
+  your own account, because a stolen admin session could then lock you out for
+  good. Instead, run the break-glass script inside the app container, which
+  needs shell access to the host:
+
+  ```bash
+  docker exec -it <kiri-app-container> node /app/reset-password.mjs you@example.com
+  ```
+
+  In Portainer: **Containers → the app container → Console → Connect**
+  (`/bin/sh`), then run `node /app/reset-password.mjs you@example.com`. It
+  prints the link. The script asks the running server over loopback and signs
+  the request with a key derived from `APP_SECRET`. In development, use
+  `npm run -w apps/web reset-password -- you@example.com` with `npm run dev`
+  running.
+
+Every issued link and every completed reset is recorded in Admin → Audit.
+
 ## Migrating from Kiri 1.x
 
 Kiri 2.0 is not an in-place upgrade of a 1.x install — it's a new instance

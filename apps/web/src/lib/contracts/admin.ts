@@ -25,6 +25,12 @@ export interface AdminUserView {
   seriesTracked: number;
 }
 
+/** POST /api/admin/users/:id/password-reset — the link is shown once. */
+export interface PasswordResetLinkView {
+  url: string;
+  expiresAt: string;
+}
+
 /** PATCH /api/admin/users/:id — an admin cannot demote or ban themselves. */
 export const updateUserSchema = z.object({
   role: z.enum(ROLES).optional(),

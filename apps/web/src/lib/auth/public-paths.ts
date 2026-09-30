@@ -12,6 +12,7 @@ const PUBLIC_EXACT = new Set([
   "/login",
   "/register",
   "/setup",
+  "/reset-password",
   "/offline",
   "/api/health",
   "/api/version",
@@ -21,6 +22,9 @@ const PUBLIC_EXACT = new Set([
   // resolve, admin actions) stays session-gated.
   "/api/plugins/hosts",
   "/api/plugins/credentials",
+  // The container CLI signs with an APP_SECRET-derived key instead of a
+  // session (src/lib/auth/cli-signature.ts).
+  "/api/cli/password-reset",
   "/manifest.json",
   "/favicon.ico",
   "/sw.js",

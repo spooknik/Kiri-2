@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { AlertTriangle, Users } from "lucide-react";
+import { AlertTriangle, KeyRound, Users } from "lucide-react";
 import {
   Badge,
+  Button,
   Card,
   CardContent,
   EmptyState,
@@ -15,12 +16,14 @@ import {
 import { useAdminUsers, useUpdateAdminUser } from "@/hooks/use-admin";
 import type { AdminUserView, Role } from "@/lib/contracts";
 import { BanUserDialog } from "./ban-user-dialog";
+import { ResetPasswordDialog } from "./reset-password-dialog";
 
 export function UsersTable({ currentUserId }: { currentUserId: string }) {
   const { data, isLoading, isError } = useAdminUsers();
   const updateUser = useUpdateAdminUser();
   const { toast } = useToast();
   const [banTarget, setBanTarget] = useState<AdminUserView | null>(null);
+  const [resetTarget, setResetTarget] = useState<AdminUserView | null>(null);
 
   function handleRoleChange(user: AdminUserView, role: Role) {
     if (role === user.role) return;
@@ -145,9 +148,19 @@ export function UsersTable({ currentUserId }: { currentUserId: string }) {
                 </label>
                 {isSelf ? (
                   <p className="text-xs text-muted">
-                    You can&apos;t change your own role or ban status.
+                    You can&apos;t change your own role, ban status or reset your own password here.
                   </p>
-                ) : null}
+                ) : (
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    size="sm"
+                    onClick={() => setResetTarget(user)}
+                  >
+                    <KeyRound className="h-4 w-4" aria-hidden="true" />
+                    Reset password
+                  </Button>
+                )}
               </div>
             </CardContent>
           </Card>
@@ -161,6 +174,8 @@ export function UsersTable({ currentUserId }: { currentUserId: string }) {
         onClose={() => setBanTarget(null)}
         onConfirm={confirmBan}
       />
+
+      <ResetPasswordDialog user={resetTarget} onClose={() => setResetTarget(null)} />
     </div>
   );
 }

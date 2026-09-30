@@ -178,6 +178,10 @@ COPY --from=build --chown=kiri:kiri /app/sdk /app/sdk
 
 COPY --chown=kiri:kiri docker/entrypoint.sh /app/entrypoint.sh
 
+# Break-glass password reset, run with `docker exec` (docs/DEPLOY.md). Plain
+# Node with no dependencies, so it works without the build toolchain.
+COPY --chown=kiri:kiri apps/web/scripts/reset-password.mjs /app/reset-password.mjs
+
 RUN chmod +x /app/entrypoint.sh \
  && mkdir -p /data/library /data/covers /data/plugins /data/tmp \
  && chown -R kiri:kiri /data

@@ -18,6 +18,7 @@
     "db:migrate:dev": "prisma migrate dev",
     "db:studio": "prisma studio",
     "import:v1": "tsx scripts/import-v1.ts",
+    "reset-password": "node --env-file-if-exists=.env scripts/reset-password.mjs",
     "postinstall": "prisma generate"
   },
   "dependencies": {

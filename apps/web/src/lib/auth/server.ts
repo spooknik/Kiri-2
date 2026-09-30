@@ -31,6 +31,7 @@ import {
   resolveSignUp,
 } from "@/lib/auth/registration";
 import { limitAuthAttempt, retryAfterSeconds } from "@/lib/auth/rate-limits";
+import { RESET_PASSWORD_PREFIX, hashResetIdentifier } from "@/lib/auth/reset-token";
 import { getEnv } from "@/lib/env";
 import { attachInviteRedeemer, hashInviteToken } from "@/lib/invites";
 import { prisma } from "@/lib/prisma";
@@ -51,6 +52,7 @@ const RATE_LIMITED_PATHS = new Set([
   "/sign-in/email",
   "/change-password",
   "/forget-password",
+  "/reset-password",
 ]);
 
 /** Narrow an endpoint context's `headers` (typed loosely upstream) to Headers. */
@@ -85,6 +87,30 @@ export const auth = betterAuth({
     // No SMTP requirement for a self-hosted instance.
     requireEmailVerification: false,
     autoSignIn: true,
+    // Reset links are minted by an admin or the container CLI
+    // (src/lib/auth/password-reset.ts), never emailed, so `sendResetPassword`
+    // stays unset and the public request endpoint stays off. Redeeming one
+    // signs the user out everywhere.
+    revokeSessionsOnPasswordReset: true,
+    onPasswordReset: async ({ user }) => {
+      // An imported account that never set a password has one now.
+      await prisma.user.update({ where: { id: user.id }, data: { mustSetPassword: false } });
+      // Lazy: src/lib/audit reaches this module through src/lib/api.
+      const { AUDIT_ACTIONS, AUDIT_TARGETS, recordAudit } = await import("@/lib/audit");
+      await recordAudit({
+        actorId: user.id,
+        action: AUDIT_ACTIONS.passwordReset,
+        targetType: AUDIT_TARGETS.user,
+        targetId: user.id,
+      });
+    },
+  },
+  verification: {
+    // Reset tokens are stored hashed; see src/lib/auth/reset-token.ts.
+    storeIdentifier: {
+      default: "plain",
+      overrides: { [RESET_PASSWORD_PREFIX]: { hash: hashResetIdentifier } },
+    },
   },
   user: {
     additionalFields: {
